@@ -9,8 +9,32 @@
   color-scheme: light dark;
 }
 
+/* The theme setting wins; with "Match system" nothing is stamped on <html>
+   and the media query below decides. */
+:root[data-theme='dark'] {
+  --bg: #151922;
+  --bg-soft: #1f2431;
+  --fg: #eef1f7;
+  --fg-soft: #98a2b8;
+  --line: #2d3446;
+  --accent: #6c9bff;
+  --danger: #ff6b6b;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #ffffff;
+  --bg-soft: #f3f5f9;
+  --fg: #141922;
+  --fg-soft: #5c6679;
+  --line: #dde2ec;
+  --accent: #2f6fed;
+  --danger: #d93b3b;
+  color-scheme: light;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #151922;
     --bg-soft: #1f2431;
     --fg: #eef1f7;
@@ -233,6 +257,21 @@ body {
 
 .note.is-error {
   color: var(--danger);
+}
+
+.seg-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--fg-soft);
+  padding: 0 2px;
+}
+
+.seg-head-time {
+  width: 118px;
+  text-align: left;
+  padding-left: 6px;
 }
 
 .segments {

@@ -201,14 +201,22 @@
     return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
   }
 
-  /** "1h 30m" / "45m" / "30s" — compact labels next to subsection names. */
+  /**
+   * "1h 30m" / "7m 30s" / "45m" — compact labels next to subsection names.
+   * Under an hour the seconds are kept rather than rounded away, so a total
+   * of 52m30s never reads back as "53m".
+   */
   function formatHuman(seconds) {
     const total = Math.max(0, Math.round(seconds || 0));
     if (total < 60) return `${total}s`;
     const h = Math.floor(total / 3600);
-    const m = Math.round((total % 3600) / 60);
-    if (h > 0) return m > 0 ? `${h}h ${m}m` : `${h}h`;
-    return `${m}m`;
+    if (h > 0) {
+      const m = Math.round((total % 3600) / 60);
+      return m > 0 ? `${h}h ${m}m` : `${h}h`;
+    }
+    const m = Math.floor(total / 60);
+    const s = total % 60;
+    return s > 0 ? `${m}m ${s}s` : `${m}m`;
   }
 
   CAT.duration = {

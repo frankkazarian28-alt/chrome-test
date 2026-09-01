@@ -303,7 +303,14 @@
 
   /* ---------------- settings ---------------- */
 
+  /** Mirrors the timer's theme choice onto the popup itself. */
+  function applyTheme() {
+    if (settings.theme === 'auto') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.dataset.theme = settings.theme;
+  }
+
   function renderSettings() {
+    applyTheme();
     el('set-theme').value = settings.theme;
     el('set-size').value = CAT.SIZES[settings.size] ? settings.size : 'medium';
     el('set-flash').value = formatHuman(settings.flashSeconds);
