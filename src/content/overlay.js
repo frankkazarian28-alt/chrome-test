@@ -135,6 +135,8 @@
 
     const chime = createChime();
 
+    const darkQuery = root.matchMedia ? root.matchMedia('(prefers-color-scheme: dark)') : null;
+
     let session = null;
     let settings = Object.assign({}, CAT.DEFAULT_SETTINGS);
     let rafId = null;
@@ -175,9 +177,7 @@
       settings = Object.assign({}, CAT.DEFAULT_SETTINGS, next || {});
       const dark =
         settings.theme === 'dark' ||
-        (settings.theme === 'auto' &&
-          root.matchMedia &&
-          root.matchMedia('(prefers-color-scheme: dark)').matches);
+        (settings.theme === 'auto' && !!darkQuery && darkQuery.matches);
       panel.dataset.theme = dark ? 'dark' : 'light';
       refs.theme.innerHTML = icon(dark ? 'sun' : 'moon');
       refs.theme.title =
@@ -444,6 +444,12 @@
     const onResizeWindow = () => applyGeometry();
     root.addEventListener('resize', onResizeWindow);
 
+    // "Match system" has to keep matching if the system changes mid-run.
+    const onSchemeChange = () => {
+      if (settings.theme === 'auto') applySettings(settings);
+    };
+    if (darkQuery) darkQuery.addEventListener('change', onSchemeChange);
+
     // Keyboard shortcuts, ignored while typing into a page field.
     const onKeyDown = (event) => {
       if (!session) return;
@@ -475,6 +481,7 @@
       unmount() {
         stopLoop();
         root.removeEventListener('resize', onResizeWindow);
+        if (darkQuery) darkQuery.removeEventListener('change', onSchemeChange);
         doc.removeEventListener('keydown', onKeyDown, true);
         host.remove();
       },
@@ -484,7 +491,6 @@
         if (changedSession) {
           lastSegmentIndex = -1;
           lastFinished = false;
-          listSignature = '';
         }
         lastRenderKey = '';
         listSignature = '';
