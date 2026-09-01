@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Canvas Activity Timer",
+  "version": "1.0.0",
+  "description": "Scans a Canvas activity page for subsections and their times, then runs a movable, resizable countdown with a segmented pie dial.",
+  "minimum_chrome_version": "116",
+  "permissions": ["storage", "activeTab", "scripting", "notifications"],
+  "optional_permissions": ["alarms"],
+  "host_permissions": [
+    "*://*.instructure.com/*",
+    "*://*.instructure.com.au/*",
+    "*://*.canvas.net/*"
+  ],
+  "optional_host_permissions": ["*://*/*"],
+  "background": { "service_worker": "src/background/service-worker.js" },
+  "action": {
+    "default_title": "Canvas Activity Timer",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.instructure.com/*",
+        "*://*.instructure.com.au/*",
+        "*://*.canvas.net/*"
+      ],
+      "js": [
+        "src/common/constants.js",
+        "src/common/duration.js",
+        "src/common/session.js",
+        "src/content/scanner.js",
+        "src/content/dial.js",
+        "src/content/overlay.js",
+        "src/content/content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/content/overlay.css"],
+      "matches": ["*://*/*"]
+    }
+  ]
+}
