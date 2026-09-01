@@ -188,9 +188,12 @@
     return parseDuration(text);
   }
 
-  /** "9:05" / "1:02:30" — the countdown readout. */
+  /**
+   * "9:05" / "1:02:30" — the countdown readout. Rounded up so every displayed
+   * second is shown for its whole second and "0:00" appears exactly at zero.
+   */
   function formatClock(seconds) {
-    const total = Math.max(0, Math.round(seconds || 0));
+    const total = Math.max(0, Math.ceil((seconds || 0) - 1e-6));
     const h = Math.floor(total / 3600);
     const m = Math.floor((total % 3600) / 60);
     const s = total % 60;

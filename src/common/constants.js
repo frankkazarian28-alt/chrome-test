@@ -34,8 +34,8 @@
     flashEnabled: true,
     flashSeconds: 60, // start flashing when this much of the total is left
     soundEnabled: false,
-    showTotal: true,
-    autoAdvance: true // roll into the next subsection without waiting for input
+    primary: 'segment', // which time gets the big readout: 'segment' | 'total'
+    collapsed: false
   };
 
   /** Buttons offered by the +/- time control, in seconds. */

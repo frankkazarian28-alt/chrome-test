@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Canvas Activity Timer</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="head">
+      <h1 class="head-title">Activity Timer</h1>
+      <button class="btn is-icon" id="settings-toggle" title="Settings" aria-label="Settings" aria-expanded="false">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="8" cy="8" r="2.4" />
+          <path d="M8 1.5v1.6M8 12.9v1.6M14.5 8h-1.6M3.1 8H1.5M12.6 3.4l-1.1 1.1M4.5 11.5l-1.1 1.1M12.6 12.6l-1.1-1.1M4.5 4.5 3.4 3.4" />
+        </svg>
+      </button>
+    </header>
+
+    <section class="panel is-hidden" id="settings-panel" aria-label="Settings">
+      <label class="field">
+        <span class="field-label">Theme</span>
+        <select id="set-theme" class="input">
+          <option value="auto">Match system</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">Panel size</span>
+        <select id="set-size" class="input">
+          <option value="small">Small</option>
+          <option value="medium">Medium</option>
+          <option value="large">Large</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">Flash when this much is left</span>
+        <input id="set-flash" class="input" type="text" placeholder="60s" />
+      </label>
+      <label class="check">
+        <input id="set-flash-on" type="checkbox" />
+        <span>Flash near the end of a subsection</span>
+      </label>
+      <label class="check">
+        <input id="set-sound" type="checkbox" />
+        <span>Chime between subsections and at zero</span>
+      </label>
+      <label class="check">
+        <input id="set-fullscreen" type="checkbox" />
+        <span>Open the timer full screen</span>
+      </label>
+    </section>
+
+    <main id="main">
+      <!-- Running state -->
+      <section class="panel is-hidden" id="running">
+        <div class="run-activity" id="run-activity"></div>
+        <div class="run-clock" id="run-clock">0:00</div>
+        <div class="run-sub" id="run-sub"></div>
+        <div class="run-bar"><div class="run-bar-fill" id="run-bar-fill"></div></div>
+        <div class="row">
+          <button class="btn is-outline" id="run-prev">Back</button>
+          <button class="btn is-primary" id="run-toggle">Pause</button>
+          <button class="btn is-outline" id="run-next">Skip</button>
+        </div>
+        <div class="row">
+          <button class="btn is-quiet" id="run-reset">Restart</button>
+          <button class="btn is-quiet" id="run-stop">Stop &amp; close</button>
+        </div>
+        <p class="note" id="run-note"></p>
+      </section>
+
+      <!-- Plan state -->
+      <section class="panel is-hidden" id="plan">
+        <label class="field">
+          <span class="field-label">Activity</span>
+          <input id="activity" class="input" type="text" placeholder="Activity name" />
+        </label>
+
+        <div class="scan-row">
+          <span class="note" id="scan-note">Scanning…</span>
+          <button class="btn is-quiet" id="rescan">Rescan page</button>
+        </div>
+
+        <ul class="segments" id="segments"></ul>
+
+        <div class="add-row">
+          <input id="add-name" class="input" type="text" placeholder="New subsection" />
+          <input id="add-time" class="input is-time" type="text" placeholder="10" aria-label="Minutes" />
+          <button class="btn is-outline" id="add-btn" title="Add subsection">Add</button>
+        </div>
+
+        <div class="total-row">
+          <span>Total</span>
+          <strong id="total">0m</strong>
+        </div>
+
+        <button class="btn is-primary is-block" id="start">Start timer</button>
+        <p class="note is-error is-hidden" id="plan-error"></p>
+      </section>
+
+      <!-- Not a Canvas page -->
+      <section class="panel is-hidden" id="unsupported">
+        <p class="note" id="unsupported-note"></p>
+        <button class="btn is-outline is-block is-hidden" id="enable-site">Enable on this site</button>
+        <button class="btn is-quiet is-block" id="manual-start">Build a timer by hand</button>
+      </section>
+    </main>
+
+    <script src="../common/constants.js"></script>
+    <script src="../common/duration.js"></script>
+    <script src="../common/session.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
